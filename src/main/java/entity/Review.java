@@ -1,7 +1,6 @@
 package entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Review {
@@ -9,6 +8,16 @@ public class Review {
     private Long id;
     private String content;
     private int rating;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Product product;
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public Long getId() {
         return id;

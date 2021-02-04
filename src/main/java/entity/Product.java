@@ -19,9 +19,20 @@ public class Product {
     @Column(name = "type")
     private ProductType productType;
 
-    @OneToMany
-    @JoinColumn(name = "product_id")
+    @OneToMany(mappedBy = "product")
+    //@JoinColumn(name = "product_id")
     private List<Review> reviewList;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public Long getId() {
         return id;
@@ -98,6 +109,7 @@ public class Product {
                 ", price=" + price +
                 ", productType=" + productType +
                 ", reviewList=" + reviewList +
+                ", category=" + category +
                 '}';
     }
 }
