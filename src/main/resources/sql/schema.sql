@@ -85,3 +85,36 @@ VALUES
 Update product set category_id=1 where id=3;
 Update product set category_id=2 where id=4;
 Update product set category_id=3 where id=5;
+
+CREATE TABLE `attribute` (
+                             `id` BIGINT NOT NULL AUTO_INCREMENT,
+                             `name` VARCHAR(100) NULL,
+                             `value` VARCHAR(800) NULL,
+                             PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `product_attribute` (
+                                     `product_id` BIGINT NOT NULL,
+                                     `attribute_id` BIGINT NOT NULL,
+                                     PRIMARY KEY (`product_id`, `attribute_id`),
+                                     CONSTRAINT `fk_product_attribute_product_id`
+                                         FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+                                     CONSTRAINT `fk_product_attribute_attribute_id`
+                                         FOREIGN KEY (`attribute_id`) REFERENCES `attribute` (`id`)
+);
+
+INSERT INTO `attribute`
+(`id`,`name`,`value`)
+VALUES
+(1,'COLOR','RED'),
+(2,'COLOR','GREEN'),
+(3,'COLOR','BLUE');
+INSERT INTO `product_attribute`
+(`product_id`, `attribute_id`)
+VALUES
+(3,1),
+(3,2),
+(3,3),
+(4,1),
+(4,2),
+(5,3);
