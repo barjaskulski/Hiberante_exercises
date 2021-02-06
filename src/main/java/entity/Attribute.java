@@ -1,7 +1,10 @@
 package entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Attribute {
@@ -13,7 +16,7 @@ public class Attribute {
     private String value;
 
     @ManyToMany(mappedBy = "attributes")
-    private List<Product> products;
+    private Set<Product> products = new HashSet<>();
 
 
     @Override
@@ -25,11 +28,11 @@ public class Attribute {
                 '}';
     }
 
-    public List<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(Set<Product> products) {
         this.products = products;
     }
 

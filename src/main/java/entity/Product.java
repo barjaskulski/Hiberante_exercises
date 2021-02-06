@@ -3,7 +3,10 @@ package entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Product {
@@ -19,22 +22,22 @@ public class Product {
     @Column(name = "type")
     private ProductType productType;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     //@JoinColumn(name = "product_id")
-    private List<Review> reviewList;
+    private List<Review> reviewList = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     private Category category;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(joinColumns = {@JoinColumn(name = "product_id")},inverseJoinColumns = {@JoinColumn(name = "attribute_id")})
-    private List<Attribute> attributes;
+    private Set<Attribute> attributes = new HashSet<>();
 
-    public List<Attribute> getAttributes() {
+    public Set<Attribute> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(List<Attribute> attributes) {
+    public void setAttributes(Set<Attribute> attributes) {
         this.attributes = attributes;
     }
 
@@ -123,5 +126,15 @@ public class Product {
                 ", reviewList=" + reviewList +
                 ", category=" + category +
                 '}';
+    }
+
+    public void addAttributes(Attribute attribute) {
+        attributes.add(attribute);
+        attribute.getProducts().add(this);
+    }
+
+    public void addReview(Review review) {
+        reviewList.add(review);
+        review.setProduct(this);
     }
 }
