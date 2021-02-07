@@ -59,4 +59,9 @@ public class Attribute {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+        product.getAttributes().remove(this);
+    }
 }
