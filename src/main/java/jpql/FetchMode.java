@@ -1,15 +1,18 @@
 package jpql;
 
-import DTO.ProductInCategoryCounterDTO;
 import basic_CRUD.App;
+import entity.Order;
+import entity.OrderRow;
 import entity.Product;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
-public class JoinQuery {
+
+public class FetchMode {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
     private static final Logger logger = (Logger) LogManager.getLogger(App.class);
 
@@ -18,16 +21,9 @@ public class JoinQuery {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
 
-        TypedQuery<Product> query = entityManager.createQuery("select p from Product p" +
-                " left join fetch p.category c", Product.class);
-
-        //query.setParameter("id",3L);
-
-        List<Product> resultList = query.getResultList();
-        for (Product product : resultList) {
-            logger.info(product);
-            logger.info(product.getCategory());
-        }
+        Order order = entityManager.find(Order.class, 1L);
+        logger.info(order);
+        logger.info(order.getOrderRows());
 
         entityManager.getTransaction().commit();
         entityManager.close();
