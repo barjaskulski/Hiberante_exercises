@@ -26,7 +26,7 @@ public class Product {
     //@JoinColumn(name = "product_id")
     private List<Review> reviewList = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
