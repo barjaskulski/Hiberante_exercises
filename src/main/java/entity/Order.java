@@ -1,5 +1,6 @@
 package entity;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -8,15 +9,21 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@NamedEntityGraph(
-        name = "order-rows",
-        attributeNodes = {
-                @NamedAttributeNode(value = "orderRows", subgraph = "orderRows"),
-                @NamedAttributeNode("customer")
-        }, subgraphs = @NamedSubgraph(
-                name ="orderRows",
-                attributeNodes = @NamedAttributeNode("product"))
-)
+@NamedEntityGraphs({
+    @NamedEntityGraph(
+            name = "order-rows",
+            attributeNodes = {
+                    @NamedAttributeNode(value = "orderRows", subgraph = "orderRows"),
+                    @NamedAttributeNode("customer")
+            }, subgraphs = @NamedSubgraph(
+                    name ="orderRows",
+                    attributeNodes = @NamedAttributeNode("product"))
+        ),
+        @NamedEntityGraph(
+                name = "order-and-rows",
+                attributeNodes = @NamedAttributeNode("orderRows")
+        )
+        })
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -28,7 +35,7 @@ public class Order {
 
     @OneToMany
     @JoinColumn(name = "order_id")
-    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 10)
     private Set<OrderRow> orderRows;
 
     @OneToOne
